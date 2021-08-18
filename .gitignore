@@ -127,3 +127,9 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
+
+# Ignore VS Code config
+.vscode/
+
+# Ignore Jupyter Notebooks used for matplotlib development
+notebooks/
