@@ -1,12 +1,11 @@
 from io import BytesIO
-from flask.helpers import make_response
 import matplotlib
-from matplotlib.image import BboxImage
 matplotlib.use('Agg')
 import matplotlib.pyplot as plt
 import random
 import pandas as pd
-from flask import send_file
+import gc
+import base64
 
 plt.style.use('dark_background')
 plt.style.use('seaborn-dark-palette')
@@ -27,7 +26,7 @@ def add_line_breaks(title: str):
 
 def random_agg(exclude: list = None):
     exclude = exclude or []
-    aggs = [agg for agg in ['count', 'min', 'max', 'mean', 'median', 'sum'] if agg not in exclude]
+    aggs = [agg for agg in ['count', 'mean', 'median', 'sum'] if agg not in exclude]
     return random.choice(aggs)
 
 def get_bar():
@@ -279,9 +278,17 @@ def try_get_chart(chart_choice):
         print(f'Failed - {chart_choice}: {e}')
         chart = None
         successful = False
+        # Clear the current axes.
+        plt.cla() 
+        # Clear the current figure.
+        plt.clf() 
+        # Closes all the figure windows.
+        plt.close('all')   
+        plt.close(chart)
+        gc.collect()
     else:
         successful = True
-        plt.close('all')
+        
     return chart, successful
 
 def get_random_chart(chart_choice=None):
@@ -291,14 +298,10 @@ def get_random_chart(chart_choice=None):
         chart, successful = try_get_chart(chart_choice) 
     return chart   
 
-import base64
-from flask import jsonify
-
 def serve_chart():
     chart = get_random_chart()
     img_io = BytesIO()
     chart.savefig(img_io, format='PNG', bbox_inches="tight")
-    # plt.close(chart)
     data64 = base64.b64encode(img_io.getvalue())
     data = {'message': u'data:img/jpeg;base64,'+data64.decode('utf-8')}
     return data

@@ -1,8 +1,8 @@
 const container = document.querySelector('.container');
 
-const URL = '/random_chart'
+// const URL = '/random_chart'
 
-// get the images
+// // get the images
 
 function loadImages(numImages = 10){
    let i=0;
@@ -11,9 +11,14 @@ function loadImages(numImages = 10){
     .then(response=>response.json())
     .then(data=>{
     console.log(data)
-    const img =  document.createElement('img');
+    let div = document.createElement('div')
+    div.setAttribute('class', Math.floor(Math.random() * 2) ? 'grid-item':'grid-item--width2')
+
+    let img =  document.createElement('img');
     img.src = `${data.message}`
-    container.appendChild(img)
+
+    div.appendChild(img)
+    container.appendChild(div)
     })
     i++;
     }   
@@ -22,25 +27,34 @@ function loadImages(numImages = 10){
 loadImages();
 
 
-let end_reached = false;
+// let end_reached = false;
     
-        document.addEventListener('DOMContentLoaded', () => {
-            loadImages();
+//         document.addEventListener('DOMContentLoaded', () => {
+//             loadImages();
 
-            window.onscroll = () => {
-                // check if we reached the bottom
-                if(window.innerHeight + window.scrollY >= document.body.offsetHeight && end_reached == false) {
-                    // alert("bottom");
-                    loadImages();
-                }
-            }; 
-        });
+//             window.onscroll = () => {
+//                 // check if we reached the bottom
+//                 if(window.innerHeight + window.scrollY >= document.body.offsetHeight && end_reached == false) {
+//                     // alert("bottom");
+//                     loadImages();
+//                 }
+//             }; 
+//         });
 
-// // listen for scroll event and load more images if we reach the bottom of window
-// window.addEventListener('scroll',()=>{
-//     console.log("scrolled", window.scrollY) //scrolled from top
-//     console.log(window.innerHeight) //visible part of screen
-//     if(window.scrollY + window.innerHeight >= document.documentElement.scrollHeight){
-//         loadImages();
-//     }
-// })
+// init Packery
+var grid = document.querySelector('.grid');
+var pckry = new Packery( grid, {
+  itemSelector: '.grid-item',
+  percentPosition: true
+});
+// layout Packery after each image loads
+imagesLoaded( grid ).on( 'progress', function() {
+  pckry.layout();
+});  
+  
+// var infScroll = new InfiniteScroll( '.grid', {
+//     // Infinite Scroll options...
+//     append: '.grid__item',
+//     outlayer: pckry,
+//   });
+
