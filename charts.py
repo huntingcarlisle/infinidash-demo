@@ -281,6 +281,7 @@ def try_get_chart(chart_choice):
         successful = False
     else:
         successful = True
+        plt.close('all')
     return chart, successful
 
 def get_random_chart(chart_choice=None):
@@ -297,11 +298,7 @@ def serve_chart():
     chart = get_random_chart()
     img_io = BytesIO()
     chart.savefig(img_io, format='PNG', bbox_inches="tight")
-    plt.close()
-    # img_io.seek(0)
-    file_send = send_file(img_io, mimetype='image/png')
+    # plt.close(chart)
     data64 = base64.b64encode(img_io.getvalue())
-    # response = make_response(file_send)
     data = {'message': u'data:img/jpeg;base64,'+data64.decode('utf-8')}
-    # response['message'] = u'data:img/jpeg;base64,'+data64.decode('utf-8')
     return data
