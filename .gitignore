@@ -133,3 +133,14 @@ dmypy.json
 
 # Ignore Jupyter Notebooks used for matplotlib development
 notebooks/
+
+# Ignore Image outputs
+images/
+
+# Ignore DS_Store
+.DS_Store
+
+# Ignore CSVs
+*.csv
+*.xlsx
+*.xlsm

@@ -1,8 +1,10 @@
 import os
-
-from flask import Flask, render_template
+from io import BytesIO 
+from flask import Flask, render_template, send_file
+from flask.helpers import send_file
 
 def create_app(test_config=None):
+    import charts
     app = Flask(__name__)
     app.config.from_mapping(
         SECRET_KEY=os.environ.get('SECRET_KEY', default='dev')
@@ -13,8 +15,5 @@ def create_app(test_config=None):
     else:
         app.config.from_mapping(test_config)
 
-    @app.route("/")
-    def index():
-        return render_template('index.html')
 
     return app
