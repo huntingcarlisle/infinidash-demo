@@ -144,3 +144,5 @@ images/
 *.csv
 *.xlsx
 *.xlsm
+
+config.py
